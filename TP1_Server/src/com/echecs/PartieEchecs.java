@@ -170,8 +170,34 @@ public class PartieEchecs {
      * si le roi blanc est en échec, tout autre caractère, sinon.
      */
     public char estEnEchec() {
-    	//Juste du remplissage temporaire
-    	return 'Y';
+    	Position positionRoi = trouverPositionRoi();
+        char couleurAdversaire = (tour == 'b') ? 'n' : 'b';
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = echiquier[i][j];
+                if (piece != null && piece.getCouleur() == couleurAdversaire) {
+                    Position positionPiece = EchecsUtil.getPosition((byte) (i + 1), (byte) ('a' + j));
+                    if (piece.peutSeDeplacer(positionPiece, positionRoi, echiquier)) {
+                        return tour;
+                    }
+                }
+            }
+        }
+        return ' ';
+    }
+    
+    private Position trouverPositionRoi() {
+        char couleurRoi = (tour == 'b') ? 'R' : 'r';
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = echiquier[i][j];
+                if (piece != null && piece instanceof Roi && piece.getCouleur() == tour) {
+                    return EchecsUtil.getPosition((byte) (i + 1), (byte) ('a' + j));
+                }
+            }
+        }
+        return null; // Impossible normalement, car le roi devrait toujours être présent
     }
     /**
      * Retourne la couleur n ou b du joueur qui a la main.
