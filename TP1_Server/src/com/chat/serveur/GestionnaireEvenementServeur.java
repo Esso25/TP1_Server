@@ -73,7 +73,15 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     msg=evenement.getArgument();
                     serveur.EnvoiMessagePrive(cnx,msg);
                     break;
-
+                    
+                case "CHESS":
+                	serveur.EnvoyerInvitationJeu(cnx, evenement.getArgument());
+                	break;
+                	
+                case "ABANDON":
+                	serveur.abandonnerPartie(cnx,evenement.getArgument());
+                	break;
+                	
                 case "QUIT":
                     msg=evenement.getArgument();
                     serveur.quitterSalonPrive(cnx,msg);

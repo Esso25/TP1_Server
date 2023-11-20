@@ -1,6 +1,9 @@
 package com.chat.serveur;
 
+import com.echecs.PartieEchecs;
+
 public class SalonPrive {
+    private PartieEchecs partieEchecs;
 	String aliasHote,aliasInvite;
 
     public SalonPrive(String aliasHote, String aliasInvite) {
@@ -19,5 +22,13 @@ public class SalonPrive {
         SalonPrive sp = (SalonPrive) obj;
         return aliasInvite.equals(sp.aliasInvite) && aliasHote.equals(sp.aliasHote);
     }
+
+	public PartieEchecs getPartieEchecs() {
+		return partieEchecs;
+	}
+
+	public void setPartieEchecs(PartieEchecs partieEchecs) {
+		this.partieEchecs = partieEchecs;
+	}
 
 }

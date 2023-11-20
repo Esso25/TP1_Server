@@ -26,7 +26,7 @@ public class PartieEchecs {
     private Piece[][] echiquier;
     private String aliasJoueur1, aliasJoueur2;
     private char couleurJoueur1, couleurJoueur2;
-
+    private boolean abandon;
     /**
      * La couleur de celui à qui c'est le tour de jouer (n ou b).
      */
@@ -37,6 +37,7 @@ public class PartieEchecs {
      * Répartit au hasard les couleurs n et b entre les 2 joueurs.
      */
     public PartieEchecs() {
+    	setAbandon(false);
         echiquier = new Piece[8][8];
         //Placement des pièces :
         
@@ -91,6 +92,7 @@ public class PartieEchecs {
         tour = 'b'; 
 
     }
+    
 
     /**
      * Change la main du jeu (de n à b ou de b à n).
@@ -152,6 +154,7 @@ public class PartieEchecs {
         // Effectuer le déplacement
         echiquier[ligne_finale][col_finale] = pieceADeplacer;
         echiquier[ligne_initiale][col_initiale] = null;
+        estEnEchec();
      // Changer le tour après un déplacement réussi
         changerTour(); 
         return true;
@@ -199,6 +202,8 @@ public class PartieEchecs {
         }
         return null; // Impossible normalement, car le roi devrait toujours être présent
     }
+    //vérifie un abandon
+   
     /**
      * Retourne la couleur n ou b du joueur qui a la main.
      *
@@ -242,6 +247,7 @@ public class PartieEchecs {
     public char getCouleurJoueur1() {
         return couleurJoueur1;
     }
+    
     /**
      * Retourne la couleur n ou b du deuxième joueur.
      * @return char couleur du deuxième joueur.
@@ -249,4 +255,24 @@ public class PartieEchecs {
     public char getCouleurJoueur2() {
         return couleurJoueur2;
     }
+
+	public void setCouleurJoueur1(char couleurJoueur1) {
+		this.couleurJoueur1 = couleurJoueur1;
+	}
+
+	public void setCouleurJoueur2(char couleurJoueur2) {
+		this.couleurJoueur2 = couleurJoueur2;
+	}
+
+
+	public boolean isAbandon() {
+		return abandon;
+	}
+
+
+	public void setAbandon(boolean abandon) {
+		this.abandon = abandon;
+	}
+	
+    
 }

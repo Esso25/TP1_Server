@@ -1,6 +1,7 @@
 package com.chat.serveur;
 
 import com.chat.commun.net.Connexion;
+import com.echecs.PartieEchecs;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -141,15 +142,70 @@ public class ServeurChat extends Serveur {
                     SalonPrive sp = new SalonPrive(cnx1.getAlias(), alias2);
                     salonPrives.add(sp);
                     invitations.remove(invitation2);
-                    cnx2.envoyer(cnx1.getAlias() + " a accepte votre invitation");
+                    cnx2.envoyer(cnx1.getAlias() + " a accepté votre invitation");
                 } else {
                     invitations.add(invitation);
-                    cnx2.envoyer(cnx1.getAlias() + " Vous a envoyer une invitation de chat prive");
+                    cnx2.envoyer(cnx1.getAlias() + " vous a envoyé une invitation de chat privé");
                 }
             } else
                 cnx1.envoyer("Alias " + alias2 + " inexistant");
         }else
             cnx1.envoyer("Impossible de creer ce chat");
+    }
+    public void EnvoyerInvitationJeu(Connexion cnx1, String alias2){
+        if(!cnx1.getAlias().equalsIgnoreCase(alias2)) {
+            Connexion cnx2 = isExistAlias(alias2);
+            if (cnx2 != null) {
+                Invitation invitation = new Invitation(cnx1.getAlias(), alias2);
+                Invitation invitation2 = new Invitation(alias2, cnx1.getAlias());
+                if (invitations.contains(invitation2)) {
+                    SalonPrive sp = new SalonPrive(cnx1.getAlias(), alias2);
+                    salonPrives.add(sp);
+                    invitations.remove(invitation2);
+                    cnx2.envoyer(cnx1.getAlias() + " a accepté votre invitation"); 
+                    PartieEchecs nouvellePartie=new PartieEchecs();
+                    double alea=Math.random();
+                    if (alea>=0.5){
+                    nouvellePartie.setCouleurJoueur1('n');
+                    cnx1.envoyer("CHESSOK "+nouvellePartie.getCouleurJoueur1());
+                    nouvellePartie.setCouleurJoueur2('b');
+                    cnx2.envoyer("CHESSOK "+nouvellePartie.getCouleurJoueur2());
+                    }
+                    else {
+                    	nouvellePartie.setCouleurJoueur1('b');
+                        cnx1.envoyer("CHESSOK "+nouvellePartie.getCouleurJoueur1());
+                        nouvellePartie.setCouleurJoueur2('n');
+                        cnx2.envoyer("CHESSOK "+nouvellePartie.getCouleurJoueur2());
+                    }
+                    
+                } else {
+                    invitations.add(invitation);
+                    cnx2.envoyer(cnx1.getAlias() + " vous a invité aune partie d'échecs ");
+                }
+            } else
+                cnx1.envoyer("Alias " + alias2 + " inexistant");
+        }else
+            cnx1.envoyer("Impossible de creer ce chat");
+    }
+    
+    
+    //abandon de la partie
+    public void abandonnerPartie(Connexion cnx1, String alias2) {
+        Connexion cnx2 = isExistAlias(alias2);
+        if(cnx2!=null){
+       PartieEchecs p=new PartieEchecs();
+       if(p.getAliasJoueur2()==cnx2.getAlias()|| p.getAliasJoueur2()==cnx2.getAlias()) {
+        p.setAbandon(true);
+        cnx1.envoyer(cnx2.getAlias()+" a abandonné la partie, vous etes le vainqueur");
+        }
+        else if(p.getAliasJoueur1()==cnx1.getAlias()||p.getAliasJoueur2()==cnx1.getAlias()) {
+        	p.setAbandon(true);
+            cnx2.envoyer(cnx1.getAlias()+" a abandonné la partie, vous etes le vainqueur");
+        }   
+        else{
+        	p.setAbandon(false);
+        }
+    }
     }
 
     public void supprimerInvitation(Connexion cnx1, String alias2){
